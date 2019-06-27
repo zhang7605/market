@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.fangqcloud.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="club.fangqcloud.pojo.User">
+        <id column="userId" jdbcType="INTEGER" property="userId" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="auth" jdbcType="VARCHAR" property="auth" />
+    </resultMap>
+
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="Integer">
+        select * from user
+        where userId = #{userId}
+    </select>
+
+    <select id="selectByUsername"  resultMap="BaseResultMap" parameterType="String">
+        select * from user
+        where username = #{username}
+    </select>
+
+
+
+
+    <select id="selectDynatic" resultMap="BaseResultMap" parameterType="club.fangqcloud.pojo.User">
+        select * from user
+        <where>
+            <if test="userId != '' and userId != null">
+                userId = #{userId}
+            </if>
+            <if test="username != '' and username != null">
+                and username = #{username}
+            </if>
+            <if test="password != '' and password != null">
+                and password = #{password}
+            </if>
+            <if test="auth !='' and auth != null">
+                and auth = #{auth}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertDynatic" parameterType="club.fangqcloud.pojo.User">
+        insert into user
+        set username = #{username},
+        password = #{password}
+    </insert>
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.fangqcloud.mapper.GoodMapper">
+    <resultMap id="BaseResultMap" type="club.fangqcloud.pojo.Good">
+        <id column="goodId" jdbcType="INTEGER" property="goodId" />
+        <result column="goodName" jdbcType="VARCHAR" property="goodName" />
+        <result column="price" jdbcType="VARCHAR" property="price" />
+        <result column="goodType" jdbcType="INTEGER" property="goodType" />
+        <result column="createTimestamp" jdbcType="TIMESTAMP" property="createTimestamp" />
+        <result column="changeTimestamp" jdbcType="TIMESTAMP" property="changeTimestamp" />
+    </resultMap>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from good
+    </select>
+
+    <select id="select" resultMap="BaseResultMap" parameterType="club.fangqcloud.pojo.Good">
+        select * from good
+        <where>
+            <if test="goodId != '' and goodId != null">
+                goodId = #{goodId}
+            </if>
+            <if test="goodName != '' and goodName != null">
+                goodName = #{goodName}
+            </if>
+            <if test="price != '' and price != null">
+                price = #{price}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,50 @@
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace命名空间，为了对sql语句进行隔离，方便管理，mapper开发dao方式，使用namespace有特殊作用  
+mapper代理开发时将namespace指定为mapper接口的全限定名  
+ -->
+<mapper namespace="club.fangqcloud.mapper.SellMapper"> 
+<!--在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象 
+mapper.xml以statement为单位管理sql语句  
+ -->
+	<!-- 添加销售记录 -->
+	<insert id="addSell" parameterType="sell">
+		insert into sell(productObj,customerObj,price,sellCount,sellDate,payWay,logistics,wayNumber,sellMemo) values 
+		(#{productObj.productId},#{customerObj.customerId},#{price},#{sellCount},#{sellDate},#{payWay},#{logistics},#{wayNumber},#{sellMemo})
+	</insert>
+
+	<!-- 按照查询条件分页查询销售记录 -->
+	<select id="querySell" resultMap="sellMap" >
+		select sell.* from sell,customer,product ${where} and sell.productObj = product.productId and sell.customerObj = customer.customerId limit #{startIndex},#{pageSize}
+	</select>
+	<resultMap id="sellMap" type="sell">
+        <id property="sellId" column="sellId" />
+        <association property="productObj" column="productObj" select="club.fangqcloud.mapper.ProductMapper.getProduct" />
+        <association property="customerObj" column="customerObj" select="club.fangqcloud.mapper.CustomerMapper.getCustomer" />
+    </resultMap>
+
+    <!-- 按照查询条件查询所有销售记录 -->
+	<select id="querySellList" resultMap="sellMap" >
+		select sell.* from sell,customer,product ${where} and sell.productObj = product.productId and sell.customerObj = customer.customerId
+	</select>
+
+    <!-- 按照查询条件的销售记录数 -->
+	<select id="querySellCount" resultType="int">
+		select count(*) from sell,customer,product ${where} and sell.productObj = product.productId and sell.customerObj = customer.customerId
+	</select>
+
+	<!-- 根据主键查询某个销售记录 -->
+	<select id="getSell" parameterType="int" resultMap="sellMap">
+		select * from sell where sell.sellId = #{sellId}
+	</select>
+
+	<!-- 更新销售记录 -->
+	<update id="updateSell" parameterType="sell">
+		update sell set productObj=#{productObj.productId},customerObj=#{customerObj.customerId},price=#{price},sellCount=#{sellCount},sellDate=#{sellDate},payWay=#{payWay},logistics=#{logistics},wayNumber=#{wayNumber},sellMemo=#{sellMemo} where sellId = #{sellId}
+	</update>
+
+	<!-- 删除销售记录 -->
+	<delete id="deleteSell" parameterType="int">
+		delete from sell where sellId=#{sellId}
+	</delete>
+
+</mapper>
